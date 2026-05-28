@@ -16,20 +16,21 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// Старт флоу — логуємо заголовок",
                   "console.log(\"═══════════════════════════════════════════\");",
                   "console.log(\"🚀 Старт флоу: Публікація в блозі\");",
                   "console.log(\"   apiToken:\", pm.collectionVariables.get(\"apiToken\"));",
                   "console.log(\"═══════════════════════════════════════════\");"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.1 — Отримати профіль автора",
@@ -55,25 +56,31 @@
                   "",
                   "pm.test(\"✅ 9.1 — Статус 200\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.1 — JSON Schema користувача валідна\", function () {",
                   "    // TODO: pm.response.to.have.jsonSchema(userSchema)",
+                  "    pm.response.to.have.jsonSchema(schema);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.1 — Email містить @\", function () {",
                   "    // TODO",
+                  "    pm.expect(pm.response.json().email).to.match(/@/);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.1 — Збережено blogUserId і blogUserName\", function () {",
                   "    const user = pm.response.json();",
-                  "    // TODO: pm.collectionVariables.set(\"blogUserId\", user.id.toString())",
-                  "    // TODO: pm.collectionVariables.set(\"blogUserName\", user.name)",
+                  "    pm.collectionVariables.set(\"blogUserId\", user.id.toString())",
+                  "     pm.collectionVariables.set(\"blogUserName\", user.name)",
                   "    console.log(\"Автор флоу:\", user.id, \"—\", user.name);",
                   "});",
                   "",
-                  "// TODO: qa.logResponse(\"9.1\", pm.response);"
-                ]
+                  "qa.logResponse(\"9.1\", pm.response);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -100,16 +107,17 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "console.log(\"🔴 Негативне тестування POST /posts — 5 невалідних кейсів\");"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.2 — 5 негативних кейсів для POST /posts",
@@ -166,13 +174,16 @@
                   "            console.log(\"  → Отримали: \" + res.code +",
                   "                        \" | Реальне API поверне: \" + tc.realExpected);",
                   "            // TODO: для реального API розкоментуй:",
-                  "            // pm.expect(res.code).to.eql(tc.realExpected);",
+                  "            pm.expect(res.code).to.eql(tc.realExpected);",
                   "            pm.expect(res.code).to.be.a(\"number\"); // Документуємо кейс",
                   "            done();",
                   "        });",
                   "    });",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -198,7 +209,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// Генеруємо унікальний заголовок та тіло — кожен запуск різний.",
                   "// qa.randomEmail() доступний через bare-assignment у pre-request колекції.",
@@ -207,13 +217,15 @@
                   "pm.collectionVariables.set(\"blogTitle\", title);",
                   "pm.collectionVariables.set(\"blogBody\",  body);",
                   "console.log(\"Заголовок поста:\", title);"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.2 — Створити публікацію",
@@ -229,16 +241,20 @@
                   "",
                   "pm.test(\"✅ 9.2 — Статус 201 Created\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(201);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.2 — title, userId та id у відповіді коректні\", function () {",
                   "    const json = pm.response.json();",
                   "    // TODO: три assertions — title, userId, id",
+                  "    pm.expect(body.title).to.eql(pm.collectionVariables.get(\"blogTitle\"));",
+                  "    pm.expect(body.userId).to.eql(pm.collectionVariables.get(\"blogUserId\"));",
+                  "    pm.expect(body.id).to.be.above(0);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.2 — Збережено blogPostId\", function () {",
                   "    const id = pm.response.json().id;",
-                  "    // TODO: pm.collectionVariables.set(\"blogPostId\", id.toString())",
+                  "    pm.collectionVariables.set(\"blogPostId\", id.toString())",
                   "    console.log(\"📌 blogPostId =\", id);",
                   "});",
                   "",
@@ -248,9 +264,12 @@
                   "// Спрацьовує тільки в Collection Runner / Newman.",
                   "if (pm.response.code !== 201) {",
                   "    console.warn(\"⚠️  Пост не створено (код \" + pm.response.code + \"). Перехід до очищення.\");",
-                  "    // TODO: pm.execution.setNextRequest(\"HW 9.7 — DELETE /posts (видалення)\");",
+                  "    pm.execution.setNextRequest(\"HW 9.7 — DELETE /posts (видалення)\");",
                   "}"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -285,7 +304,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// JSONPlaceholder симулює створення (повертає id=101), але не зберігає дані.",
                   "// GET /posts/101 поверне 404. Для демонстрації флоу використовуємо відомий пост.",
@@ -296,13 +314,15 @@
                   "if (safeId !== rawId) {",
                   "    console.log(\"ℹ️  JSONPlaceholder: id \" + rawId + \" → fallback до id=\" + safeId);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.3 — Перевірити, що пост доступний",
@@ -315,24 +335,40 @@
                   "",
                   "const postSchema = {",
                   "    // TODO: type: \"object\", required: [...], properties: {...}",
+                  "    type: \"object\",",
+                  "    required: [\"userId\", \"id\", \"title\", \"body\"],",
+                  "    properties: {",
+                  "        userId: { type: \"number\" },",
+                  "        id:     { type: \"number\" },",
+                  "        title:  { type: \"string\" },",
+                  "        body:   { type: \"string\" }",
+                  "    }",
                   "};",
                   "",
                   "pm.test(\"✅ 9.3 — Статус 200\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.3 — JSON Schema поста валідна\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.jsonSchema(schema);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.3 — id є числом\", function () {",
                   "    // TODO",
+                  "    pm.expect(pm.response.json().id).to.be.a(\"number\");",
                   "});",
                   "",
                   "pm.test(\"✅ 9.3 — userId збігається з автором\", function () {",
                   "    // TODO",
+                  "    pm.expect(pm.response.json().userId).to.equal(pm.collectionVariables.get(\"blogUserId\"));",
+                  "});",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -359,18 +395,19 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// Генеруємо дані коментаря",
                   "pm.collectionVariables.set(\"commentEmail\", qa.randomEmail());",
                   "console.log(\"Коментує:\", pm.collectionVariables.get(\"commentEmail\"));"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.4 — Додати коментар",
@@ -394,18 +431,23 @@
                   "// ── Основні перевірки ────────────────────────────────────────",
                   "pm.test(\"✅ 9.4 — Статус 201\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(201);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.4 — postId у коментарі відповідає blogPostId\", function () {",
                   "    // TODO",
+                  "    pm.expect(pm.response.json().postId).to.equal(pm.collectionVariables.get(\"blogPostId\"));",
                   "});",
                   "",
                   "pm.test(\"✅ 9.4 — Збережено blogCommentId\", function () {",
                   "    const id = pm.response.json().id;",
-                  "    // TODO: pm.collectionVariables.set(\"blogCommentId\", id.toString())",
+                  "  pm.collectionVariables.set(\"blogCommentId\", id.toString())",
                   "    console.log(\"💬 blogCommentId =\", id);",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -440,7 +482,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// Генеруємо новий заголовок зі збереженням старого як основи",
                   "const oldTitle = pm.collectionVariables.get(\"blogTitle\") || \"Пост\";",
@@ -448,13 +489,15 @@
                   "pm.collectionVariables.set(\"updatedTitle\", updated);",
                   "console.log(\"Старий заголовок:\", oldTitle);",
                   "console.log(\"Новий заголовок:\", updated);"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.5 — Відредагувати заголовок поста",
@@ -469,19 +512,25 @@
                   "",
                   "pm.test(\"✅ 9.5 — Статус 200\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.5 — Title оновлено до нового значення\", function () {",
                   "    // TODO: pm.expect(pm.response.json().title).to.eql(...)",
+                  "    pm.expect(pm.response.json().title).to.equal(pm.collectionVariables.get(\"updatedTitle\"));",
                   "});",
                   "",
                   "pm.test(\"✅ 9.5 — id і userId залишились незмінними\", function () {",
                   "    const json = pm.response.json();",
                   "    // TODO: два assertions — id та userId",
+                  "    pm.expect(pm.response.json().id).to.equal(pm.collectionVariables.get(\"blogPostId\"));",
                   "});",
                   "",
                   "qa.logResponse(\"9.5 PATCH post\", pm.response);"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -517,7 +566,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ═══════════════════════════════════════════════════════════════",
                   "// ✏️  КРОК 9.6 — Видалити пост (cleanup)",
@@ -529,10 +577,12 @@
                   "",
                   "pm.test(\"✅ 9.6 — Статус 200\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 9.6 — Тіло відповіді є порожнім {}\", function () {",
                   "    // TODO",
+                  "    pm.expect(pm.response.json()).to.eql({});",
                   "});",
                   "",
                   "// ── Підсумок флоу ────────────────────────────────────────────",
@@ -543,7 +593,10 @@
                   "console.log(\"   Post ID:    \", pm.collectionVariables.get(\"blogPostId\"));",
                   "console.log(\"   Comment ID: \", pm.collectionVariables.get(\"blogCommentId\"));",
                   "console.log(\"═══════════════════════════════════════════\");"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],

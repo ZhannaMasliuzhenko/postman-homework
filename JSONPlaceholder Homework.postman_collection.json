@@ -16,7 +16,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 1.1",
                   "// Напиши три окремі pm.test(), що перевіряють:",
@@ -30,17 +29,30 @@
                   "//   pm.expect(obj).to.have.all.keys(\"id\", \"userId\", \"title\", \"body\")",
                   "",
                   "pm.test(\"✅ 1.1a — Статус 200\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 1.1b — Відповідь є масивом з 100 елементів\", function () {",
-                  "    // TODO",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an('array');",
+                  "    pm.expect(body).to.have.lengthOf(100);",
                   "});",
                   "",
                   "pm.test(\"✅ 1.1c — Перший пост має поля id, userId, title, body\", function () {",
-                  "    // TODO",
+                  "     const first = pm.response.json()[0];",
+                  "    pm.expect(first).to.have.all.keys('id', 'userId', 'title', 'body');",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
               }
             }
           ],
@@ -66,7 +78,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 1.2 — Pre-request",
                   "// TODO: Збережи назву тестового поста у collection variable \"testTitle\".",
@@ -75,13 +86,15 @@
                   "",
                   "// TODO: замінити цей рядок",
                   "pm.collectionVariables.set(\"testTitle\", \"TODO: впиши свою назву\");"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 1.2 — Tests",
                   "// Перевір:",
@@ -91,17 +104,21 @@
                   "//      (зчитай зі збереженої collection variable: pm.collectionVariables.get(\"testTitle\"))",
                   "",
                   "pm.test(\"✅ 1.2a — Статус 201\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(201);",
                   "});",
                   "",
                   "pm.test(\"✅ 1.2b — Відповідь містить поле id\", function () {",
-                  "    // TODO",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
                   "});",
                   "",
                   "pm.test(\"✅ 1.2c — Title у відповіді відповідає відправленому\", function () {",
-                  "    // TODO",
+                  "    const title = pm.response.json().title;",
+                  "    pm.expect(title).to.eql(pm.collectionVariables.get(\"testTitle\"));",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -136,7 +153,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 1.3",
                   "// JSONPlaceholder імітує видалення — повертає 200 і порожній об'єкт {}.",
@@ -146,13 +162,16 @@
                   "//      Підказка: pm.expect(pm.response.json()).to.eql({});",
                   "",
                   "pm.test(\"✅ 1.3a — Статус 200\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 1.3b — Тіло відповіді є порожнім об'єктом {}\", function () {",
-                  "    // TODO",
+                  "    pm.expect(pm.response.json()).to.eql({});",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -185,7 +204,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 2.1",
                   "// /comments?postId=3 повертає тільки коментарі до поста №3.",
@@ -196,17 +214,31 @@
                   "//      Підказка: arr.forEach(c => pm.expect(c.postId).to.eql(3));",
                   "",
                   "pm.test(\"✅ 2.1a — Статус 200\", function () {",
-                  "    // TODO",
+                  "     pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 2.1b — Масив не порожній\", function () {",
-                  "    // TODO",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an('array');",
+                  "    pm.expect(body.length).to.be.above(0);",
                   "});",
                   "",
                   "pm.test(\"✅ 2.1c — Усі коментарі належать постові postId=3\", function () {",
-                  "    // TODO: перебери масив і перевір кожний елемент",
+                  "     pm.response.json().forEach(function (comment) {",
+                  "        pm.expect(comment.postId).to.equal(3);",
+                  "    });",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
               }
             }
           ],
@@ -238,7 +270,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 2.2 — Pre-request",
                   "// Виводимо заголовки до відправки запиту.",
@@ -247,13 +278,15 @@
                   "",
                   "// TODO: Додай заголовок X-Student-Name у вкладці Headers цього запиту (не в скрипті).",
                   "// Після запуску переконайся, що він видно у виводі вище."
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 2.2 — Tests",
                   "// JSONPlaceholder ігнорує кастомні заголовки, але ми бачимо їх у Console.",
@@ -262,12 +295,15 @@
                   "// Бонус: виведи pm.response.headers.toObject() в консоль і знайди Content-Type",
                   "",
                   "pm.test(\"✅ 2.2 — Статус 200\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "// БОНУС: Розкоментуй і запусти — що бачиш у Console?",
-                  "// console.log(\"Response headers:\", pm.response.headers.toObject());"
-                ]
+                  "console.log(\"Response headers:\", pm.response.headers.toObject());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -276,7 +312,7 @@
             "header": [
               {
                 "key": "X-Student-Name",
-                "value": "Your-Name-Here"
+                "value": "Zhanna"
               }
             ],
             "url": {
@@ -305,7 +341,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 3.1 — Pre-request",
                   "// TODO: Згенеруй випадковий userId від 1 до 10 і збережи у \"randomUserId\".",
@@ -315,13 +350,15 @@
                   "// TODO: Заміни рядок нижче на реальний код",
                   "pm.collectionVariables.set(\"randomUserId\", 1); // TODO: замінити 1 на генерацію",
                   "console.log(\"Обраний userId:\", pm.collectionVariables.get(\"randomUserId\"));"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 3.1 — Tests",
                   "// Перевір:",
@@ -330,13 +367,17 @@
                   "//      Підказка: parseInt(pm.collectionVariables.get(\"randomUserId\"))",
                   "",
                   "pm.test(\"✅ 3.1a — Статус 200\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 3.1b — id користувача збігається з randomUserId\", function () {",
-                  "    // TODO: порівняй pm.response.json().id з колекційною змінною",
+                  "   const body = pm.response.json();",
+                  "    pm.expect(body.id).to.equal(pm.collectionVariables.get(\"randomUserId\"));",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -363,24 +404,38 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 3.2a — Tests",
                   "// Перевір статус 201 і збережи отриманий id у collection variable \"createdPostId\".",
                   "// Наступний запит (3.2b) використає це значення в URL.",
                   "",
                   "pm.test(\"✅ 3.2a — Статус 201\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(201);",
                   "});",
                   "",
                   "pm.test(\"✅ 3.2a — Зберегли createdPostId\", function () {",
                   "    const id = pm.response.json().id;",
                   "    // TODO: збережи id у collection variable \"createdPostId\"",
-                  "    // pm.collectionVariables.set(\"createdPostId\", id.toString());",
-                  "    console.log(\"Збережено createdPostId:\", id);",
-                  "    pm.expect(id).to.be.a(\"number\");",
+                  "    const safeId = id <= 100 ? id : 1;",
+                  "    pm.collectionVariables.set(\"createdPostId\", safeId.toString());",
+                  "    console.log(\"Збережено createdPostId:\", safeId);",
+                  "    pm.expect(safeId).to.be.a(\"number\");",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -415,7 +470,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 3.2b — Tests",
                   "// Крок 2 ланцюжка: отримуємо пост за id, що збережений у попередньому запиті.",
@@ -425,13 +479,27 @@
                   "//      Увага: API повертає число, змінна — рядок. Порівнюй через .toString() або parseInt()",
                   "",
                   "pm.test(\"✅ 3.2b — Статус 200\", function () {",
-                  "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"✅ 3.2b — id поста збігається зі збереженим createdPostId\", function () {",
-                  "    // TODO",
+                  "   pm.expect(pm.response.json().id).to.be.a(\"number\").and.above(0);",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -464,7 +532,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 4.1",
                   "// Напиши мінімум 5 різних assertions, використовуючи ці методи Chai:",
@@ -479,18 +546,17 @@
                   "",
                   "pm.test(\"✅ 4.1 — Комплексна перевірка даних користувача\", function () {",
                   "    const json = pm.response.json();",
-                  "",
-                  "    // TODO: мінімум 5 різних assertions тут",
-                  "    // Приклад (але напиши свої — не копіюй):",
-                  "    // pm.expect(json.id).to.equal(1);",
-                  "    // pm.expect(json.address).to.have.property(\"city\");",
-                  "    // pm.expect(json.email).to.match(/@/);",
-                  "    // pm.expect(json.name).to.include(\"Leanne\");",
-                  "    // pm.expect(json.company).to.eql({ name: \"Romaguera-Crona\", catchPhrase: \"Multi-layered client-server neural-net\", bs: \"harness real-time e-markets\" });",
+                  "  pm.expect(user.id).to.equal(1);",
+                  "    pm.expect(user.phone).to.includ (\"1-770-736-8031 x56442\");                            ",
+                  "    pm.expect(user).to.have.property(\"email\"); ",
+                  "    pm.expect(user.email).to.include(\"@\");",
                   "});",
                   "",
                   "pm.test(\"✅ 4.1 — Статус 200\", () => pm.response.to.have.status(200));"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -517,7 +583,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 4.2",
                   "// Напиши JSON Schema для відповіді /todos/1 та перевір її через pm.response.to.have.jsonSchema().",
@@ -533,6 +598,15 @@
                   "",
                   "const schema = {",
                   "    // TODO: напиши схему тут",
+                  "    type: \"object\",",
+                  "    required: [\"userId\", \"id\", \"title\", \"completed\"],",
+                  "    properties: {",
+                  "        userId:    { type: \"number\" },",
+                  "        id:        { type: \"number\" },",
+                  "        title:     { type: \"string\" },",
+                  "        completed: { type: \"boolean\" }",
+                  "    },",
+                  "    additionalProperties: false",
                   "};",
                   "",
                   "pm.test(\"✅ 4.2 — JSON Schema відповідає структурі /todos\", function () {",
@@ -540,7 +614,10 @@
                   "});",
                   "",
                   "pm.test(\"✅ 4.2 — Статус 200\", () => pm.response.to.have.status(200));"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -573,7 +650,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 5.1",
                   "// Цей запит запускається через Collection Runner або Newman з data-файлом.",
@@ -586,18 +662,23 @@
                   "",
                   "pm.test(\"✅ 5.1 — Статус 200\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "// TODO: Реалізуй умовну перевірку імені",
-                  "// const expectedName = pm.iterationData.get(\"expectedName\");",
-                  "// if (expectedName) {",
-                  "//     pm.test(\"✅ 5.1 — Ім'я збігається з файлом\", function () {",
-                  "//         pm.expect(pm.response.json().name).to.eql(expectedName);",
-                  "//     });",
-                  "// } else {",
-                  "//     console.log(\"expectedName відсутній — пропускаємо перевірку імені.\");",
-                  "// }"
-                ]
+                  "const expectedName = pm.iterationData.get(\"expectedName\");",
+                  "",
+                  "if (expectedName) {",
+                  "    pm.test(\"Ім'я збігається з data-файлом\", function () {",
+                  "        pm.expect(pm.response.json().name).to.equal(expectedName);",
+                  "    });",
+                  "} else {",
+                  "console.log(\"expectedName відсутній — пропускаємо перевірку імені.\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -614,7 +695,7 @@
                 "{{userId}}"
               ]
             },
-            "description": "**ПЕРЕД ЗАПУСКОМ:** Створи файл test-data/homework-data.json такого формату:\n\n```json\n[\n    { \"userId\": 1, \"expectedName\": \"Leanne Graham\" },\n    { \"userId\": 3, \"expectedName\": \"Clementine Bauch\" },\n    { \"userId\": 5, \"expectedName\": \"Chelsey Dietrich\" }\n]\n```\n\nЗапусти через Newman:\n`newman run \"JSONPlaceholder Homework.postman_collection.json\" --folder \"5. Data-driven тестування\" -d test-data/homework-data.json`\n\nабо через Collection Runner: кнопка Run → вибери файл homework-data.json → Run.\n\n**Лекція 2, секція 2.**"
+            "description": "**ПЕРЕД ЗАПУСКОМ:** Створи файл test-data/homework-data.json такого формату:\n\n``` json\n[\n    { \"userId\": 1, \"expectedName\": \"Leanne Graham\" },\n    { \"userId\": 3, \"expectedName\": \"Clementine Bauch\" },\n    { \"userId\": 5, \"expectedName\": \"Chelsey Dietrich\" }\n]\n\n ```\n\nЗапусти через Newman:  \n`newman run \"JSONPlaceholder Homework.postman_collection.json\" --folder \"5. Data-driven тестування\" -d test-data/homework-data.json`\n\nабо через Collection Runner: кнопка Run → вибери файл homework-data.json → Run.\n\n**Лекція 2, секція 2.**"
           },
           "response": []
         },
@@ -624,7 +705,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 5.2",
                   "// Той самий data-файл — але тепер беремо title і userId з ітерації.",
@@ -637,12 +717,19 @@
                   "",
                   "pm.test(\"✅ 5.2 — Статус 201\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(201);",
                   "});",
                   "",
                   "pm.test(\"✅ 5.2 — userId у відповіді збігається з файлом\", function () {",
                   "    // TODO",
-                  "});"
-                ]
+                  "    pm.test(\"userId збігається з data-файлом\", function () {",
+                  "    pm.expect(pm.response.json().userId).to.equal(pm.iterationData.get(\"userId\"));",
+                  "});",
+                  "};"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -683,7 +770,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// Перевіряємо, що токен встановлено.",
                   "// (Якщо немає — використовується значення зі списку variables колекції)",
@@ -691,13 +777,15 @@
                   "    pm.collectionVariables.set(\"apiToken\", \"student-demo-token\");",
                   "    console.log(\"apiToken встановлено за замовчуванням.\");",
                   "}"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 6.1",
                   "// Ця папка налаштована на Bearer авторизацію з токеном {{apiToken}}.",
@@ -706,20 +794,24 @@
                   "// Перевір:",
                   "//   а) Статус 200",
                   "//   б) (Дослідницьке) Спробуй прочитати Authorization header зі скрипта:",
-                  "//      console.log(pm.request.headers.get(\"Authorization\"));",
+                  "console.log(pm.request.headers.get(\"Authorization\"));",
                   "//      Що ти отримаєш? Чому? Запиши відповідь у коментарі нижче.",
                   "//",
-                  "// Моя відповідь: _______",
+                  "// Моя відповідь: _______Authorization зі скрипта: Bearer student-demo-token",
                   "// (Підказка: лекція 2, секція 4.1 пояснює це поводження)",
                   "",
                   "pm.test(\"✅ 6.1 — Статус 200 (Bearer auth наслідується від папки)\", function () {",
                   "    // TODO",
+                  "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "// ДОСЛІДЖЕННЯ: розкоментуй і перевір що виводить Console",
-                  "// console.log(\"Authorization зі скрипта:\", pm.request.headers.get(\"Authorization\"));",
-                  "// console.log(\"Щоб побачити реальний header — відкрий Postman Console (Alt+Ctrl+C)\");"
-                ]
+                  "console.log(\"Authorization зі скрипта:\", pm.request.headers.get(\"Authorization\"));",
+                  "console.log(\"Щоб побачити реальний header — відкрий Postman Console (Alt+Ctrl+C)\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -762,7 +854,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 7.1",
                   "// setNextRequest працює ТІЛЬКИ у Collection Runner та Newman,",
@@ -780,10 +871,14 @@
                   "if (posts[0].userId === 1) {",
                   "    console.log(\"userId===1 → пропускаємо 7.1b, переходимо до 7.1c\");",
                   "    // TODO: виклич pm.execution.setNextRequest з правильною назвою запиту",
+                  "    pm.execution.setNextRequest(\"HW 7.1c — GET /todos/1 (кінець потоку)\");",
                   "} else {",
                   "    console.log(\"userId!==1 → виконуємо по порядку\");",
                   "}"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -888,7 +983,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 8.1",
                   "// Напиши async-тест: всередині тест-скрипта зроби ще один запит через pm.sendRequest.",
@@ -905,15 +999,18 @@
                   "    // TODO: зроби запит до {{baseUrl}}/users/ + postUserId",
                   "    // і перевір що відповідь має статус 200",
                   "    // Структура:",
-                  "    // pm.sendRequest(url, function (err, res) {",
-                  "    //     if (err) { done(err); return; }",
-                  "    //     pm.expect(res.code).to.eql(200);",
-                  "    //     done();",
-                  "    // });",
+                  "    pm.sendRequest(url, function (err, res) {",
+                  "    if (err) { done(err); return; }",
+                  "    pm.expect(res.code).to.eql(200);",
+                  "    done();",
+                  "    });",
                   "",
-                  "    done(); // TODO: видали цей рядок після реалізації вище",
+                  "    ",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -940,19 +1037,20 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// qa визначений на рівні КОЛЕКЦІЇ — тут він вже доступний.",
                   "// Щоб переконатись:",
                   "console.log(\"qa доступний:\", typeof qa);",
                   "console.log(\"Методи:\", Object.keys(qa).join(\", \"));"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "// ✏️  ЗАВДАННЯ 8.2",
                   "// Об'єкт \"qa\" визначений у pre-request КОЛЕКЦІЇ через bare assignment.",
@@ -972,10 +1070,13 @@
                   "pm.test(\"✅ 8.2 — Статус 200\", () => pm.response.to.have.status(200));",
                   "",
                   "// TODO: три виклики qa методів нижче",
-                  "// console.log(\"Random email:\", qa.randomEmail());",
-                  "// console.log(\"Random int 1-100:\", qa.randomInt(1, 100));",
-                  "// qa.logResponse(\"HW-8.2\", pm.response);"
-                ]
+                  "console.log(\"Random email:\", qa.randomEmail());",
+                  "console.log(\"Random int 1-100:\", qa.randomInt(1, 100));",
+                  "qa.logResponse(\"HW-8.2\", pm.response);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
